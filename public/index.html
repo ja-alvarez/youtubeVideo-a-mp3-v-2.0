@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Youtube a mp3</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <!-- Bootstrap JS -->
+    <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+    <!-- Estilos CSS personalizados -->
+    <link rel="stylesheet" href="/assets/css/styles.css">
+</head>
+
+<body>
+    <main>
+        <h1 class="text-center my-4">Convertidor videos Youtube a mp3</h1>
+        <section>
+            <form id="youtubeamp3" action="/convertir" method="post" class="w-50 mx-auto">
+                <div class="input-group mb-2">
+                    <span class="input-group-text fixed-width">Url</span>
+                    <input type="text" aria-label="url" name="url" class="form-control">
+                </div>
+                <div class="input-group mb-2">
+                    <span class="input-group-text fixed-width">Nombre canción</span>
+                    <input type="text" aria-label="Nombre" name="nombre" class="form-control">
+                </div>
+                <div class="d-flex justify-content-center">
+                    <input type="submit" class="btn btn-success my-2" value="Convertir">
+                </div>
+            </form>
+        </section>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const form = document.getElementById('youtubeamp3');
+            form.addEventListener('submit', async function (event) {
+                event.preventDefault();
+                const formData = new FormData(form);
+                const url = formData.get('url');
+                const nombre = formData.get('nombre');
+                try {
+                    const response = await fetch('/convertir', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                        },
+                        body: `url=${encodeURIComponent(url)}&nombre=${encodeURIComponent(nombre)}`,
+                    });
+                    if (!response.ok) {
+                        throw new Error('Error en la solicitud');
+                    }
+                    form.reset();
+                    alert('Conversión completada correctamente');
+                } catch (error) {
+                    console.error('Error:', error);
+                    alert('Hubo un error en la conversión');
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>
